@@ -15,4 +15,4 @@ selected = st.feedback("stars")
 if selected is not None:
     st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
 import streamlit as st
-st.image("sunrise.jpg", caption="Sunrise by the mountains")
+st.image(https://sl.bing.net/d7FSTs0JDfU, caption="Sunrise by the mountains")
