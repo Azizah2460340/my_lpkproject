@@ -25,17 +25,6 @@ compounds = {
         "link_youtube": "https://www.youtube.com/watch?v=4g4g4g4g4g4",
         "rating": 0,
         "reviews": []
-    },
-    "Metana": {
-        "titik_didih": "-161.5 °C",
-        "titik_leleh": "-182.5 °C",
-        "kepolaran": "Non-polar",
-        "rumus_kimia": "CH4",
-        "fun_fact": "Metana adalah komponen utama gas alam.",
-        "ikatan_kimia": "Terdapat ikatan tunggal C-H.",
-        "link_youtube": "https://www.youtube.com/watch?v=5h5h5h5h5h5",
-        "rating": 0,
-        "reviews": []
     }
 }
 
@@ -57,7 +46,7 @@ def chatbot_response(user_input):
 
 # Fungsi untuk menghitung rating rata-rata
 def calculate_average_rating(compound_name):
-    reviews = compounds[compound_name]["reviews"]
+    reviews = compounds[compound_name].get("reviews", [])
     if not reviews:
         return 0
     return sum(review['rating'] for review in reviews) / len(reviews)
@@ -66,61 +55,77 @@ def calculate_average_rating(compound_name):
 def main():
     st.set_page_config(page_title="O-Kimiaku", page_icon="🧪", layout="wide")
     
-    # Sidebar untuk navigasi
-    st.sidebar.title("Navigasi")
-    app_mode = st.sidebar.radio("Pilih Menu:", ["Beranda", "Senyawa Organik", "Rating & Ulasan", "ChatBot"])
+    # Inisialisasi session state untuk halaman aktif
+    if 'current_page' not in st.session_state:
+        st.session_state.current_page = "Beranda"
     
-    if app_mode == "Beranda":
+    # Sidebar untuk navigasi minimalis
+    with st.sidebar:
+        st.title("O-Kimiaku")
+        
+        # Membuat navigasi tanpa radio button
+        if st.button("Beranda", use_container_width=True):
+            st.session_state.current_page = "Beranda"
+        if st.button("Rating", use_container_width=True):
+            st.session_state.current_page = "Rating"
+        if st.button("ChatBot", use_container_width=True):
+            st.session_state.current_page = "ChatBot"
+    
+    # Render halaman berdasarkan state
+    if st.session_state.current_page == "Beranda":
         show_home()
-    elif app_mode == "Senyawa Organik":
-        show_compounds()
-    elif app_mode == "Rating & Ulasan":
+    elif st.session_state.current_page == "Rating":
         show_ratings()
-    elif app_mode == "ChatBot":
+    elif st.session_state.current_page == "ChatBot":
         show_chatbot()
 
 # Halaman Beranda
 def show_home():
-    st.title("Selamat Datang di O-Kimiaku 🧪")
-    st.write("""
-    Aplikasi ini membantu Anda mempelajari sifat-sifat senyawa organik seperti:
-    - Titik didih dan titik leleh
-    - Kepolaran
-    - Rumus kimia
-    - Fakta menarik
-    - Ikatan kimia
-    """)
-    
-    st.image("https://placehold.co/800x400?text=Ilustrasi+Senyawa+Organik", 
-             caption="Berbagai senyawa organik dan strukturnya")
-    
-    st.subheader("Senyawa Tersedia")
-    cols = st.columns(3)
-    for i, compound in enumerate(compounds.keys()):
-        with cols[i % 3]:
-            st.image(f"https://placehold.co/200x100?text={compound}",
-                    caption=f"{compound} - {compounds[compound]['rumus_kimia']}",
-                    width=200)
-            st.write(f"**Titik Didih:** {compounds[compound]['titik_didih']}")
-
-# Halaman Senyawa Organik
-def show_compounds():
-    st.title("Senyawa Organik")
-    
-    # Pilih senyawa
-    compound_name = st.selectbox("Pilih Senyawa Organik:", list(compounds.keys()))
-    
-    # Tampilkan informasi senyawa
-    compound_info = compounds[compound_name]
-    
-    col1, col2 = st.columns([1, 2])
+    col1, col2 = st.columns([1, 3])
     
     with col1:
-        st.image(f"https://placehold.co/400x200?text=Struktur+{compound_name}", 
+        st.image("https://placehold.co/300x200?text=O-Kimiaku+Logo", width=200)
+    
+    with col2:
+        st.title("O-Kimiaku - Explorer Senyawa Organik")
+        st.write("""
+        Aplikasi ini membantu Anda mempelajari sifat-sifat senyawa organik seperti:
+        - Titik didih dan titik leleh
+        - Kepolaran
+        - Rumus kimia
+        - Fakta menarik
+        - Ikatan kimia
+        """)
+    
+    # Bagian senyawa organik yang bisa diklik
+    st.subheader("Senyawa Organik Tersedia")
+    
+    # Menampilkan senyawa dalam bentuk card yang bisa diklik
+    cols = st.columns(2)
+    for i, (compound_name, compound_info) in enumerate(compounds.items()):
+        with cols[i % 2]:
+            with st.container(border=True):
+                st.subheader(compound_name)
+                st.write(f"**Rumus Kimia:** {compound_info['rumus_kimia']}")
+                st.write(f"**Titik Didih:** {compound_info['titik_didih']}")
+                
+                if st.button(f"Lihat detail {compound_name}", key=f"btn_{compound_name}"):
+                    show_compound_detail(compound_name)
+
+# Fungsi untuk menampilkan detail senyawa
+def show_compound_detail(compound_name):
+    st.session_state.current_page = "CompoundDetail"
+    compound_info = compounds[compound_name]
+    
+    st.title(compound_name)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.image(f"https://placehold.co/400x300?text=Struktur+{compound_name}", 
                 caption=f"Struktur {compound_name}")
     
     with col2:
-        st.subheader(compound_name)
         st.write("**Titik Didih:**", compound_info["titik_didih"])
         st.write("**Titik Leleh:**", compound_info["titik_leleh"])
         st.write("**Kepolaran:**", compound_info["kepolaran"])
@@ -131,77 +136,73 @@ def show_compounds():
         if st.button("Tonton Video Penjelasan"):
             st.markdown(f"[Tonton Video di YouTube]({compound_info['link_youtube']})", 
                        unsafe_allow_html=True)
-
-# Halaman Rating & Ulasan
-def show_ratings():
-    st.title("Rating & Ulasan")
     
-    # Pilih senyawa untuk diulas
-    compound_name = st.selectbox("Pilih Senyawa untuk Memberi Rating:", list(compounds.keys()))
+    if st.button("Kembali ke Beranda"):
+        st.session_state.current_page = "Beranda"
+        st.rerun()
+
+# Halaman Rating
+def show_ratings():
+    st.title("Rating Senyawa")
+    
+    # Pilih senyawa
+    compound_name = st.selectbox("Pilih Senyawa:", list(compounds.keys()))
     
     # Tampilkan rating saat ini
     avg_rating = calculate_average_rating(compound_name)
     st.subheader(f"Rating untuk {compound_name}")
-    st.write(f"⭐ Rating Rata-rata: {avg_rating:.1f}/5")
+    st.write(f"⭐ Rating Rata-rata: {avg_rating:.1f}/5 dari {len(compounds[compound_name].get('reviews', []))} ulasan")
     
-    # Form untuk kirim ulasan
-    with st.form(key='review_form'):
-        st.write("Tambahkan Ulasan Anda")
-        user_rating = st.slider("Rating (1-5)", 1, 5, 3)
-        user_review = st.text_area("Ulasan Anda")
-        submitted = st.form_submit_button("Kirim")
+    # Form rating sederhana
+    st.subheader("Beri Rating")
+    rating = st.slider("Pilih rating (1-5 bintang):", 1, 5, 3)
+    
+    if st.button("Submit Rating"):
+        if "reviews" not in compounds[compound_name]:
+            compounds[compound_name]["reviews"] = []
         
-        if submitted:
-            compounds[compound_name]["reviews"].append({
-                "rating": user_rating,
-                "review": user_review
-            })
-            st.success("Terima kasih atas ulasan Anda!")
+        compounds[compound_name]["reviews"].append({
+            "rating": rating,
+            "review": ""
+        })
+        st.success(f"Terima kasih! Anda memberi rating {rating} bintang untuk {compound_name}")
     
-    # Tampilkan ulasan yang ada
-    st.subheader("Ulasan Pengguna")
-    reviews = compounds[compound_name]["reviews"]
-    
-    if not reviews:
-        st.write("Belum ada ulasan untuk senyawa ini.")
-    else:
-        for i, rev in enumerate(reviews):
-            st.write(f"**Ulasan {i+1}**: ⭐ {rev['rating']}/5")
-            st.write(rev["review"])
-            st.divider()
+    if st.button("Kembali ke Beranda"):
+        st.session_state.current_page = "Beranda"
+        st.rerun()
 
 # Halaman ChatBot
 def show_chatbot():
-    st.title("ChatBot O-Kimiaku")
-    st.write("ChatBot sederhana untuk membantu Anda menjelajahi aplikasi ini.")
+    st.title("O-Kimiaku ChatBot")
     
     # Inisialisasi chat history
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
     
     # Input pengguna
-    user_input = st.text_input("Tulis pesan Anda:")
+    user_input = st.text_input("Tanya tentang senyawa organik:")
     
     if user_input:
         # Tambahkan pesan pengguna ke history
-        st.session_state.chat_history.append({"sender": "user", "message": user_input})
+        st.session_state.chat_history.append(f"Anda: {user_input}")
         
         # Dapatkan respon chatbot
         bot_response = chatbot_response(user_input)
         
-        # Simulasi delay untuk tampilan lebih natural
+        # Simulasi delay
         with st.spinner("Mengetik..."):
             time.sleep(0.5)
-            st.session_state.chat_history.append({"sender": "bot", "message": bot_response})
+            st.session_state.chat_history.append(f"Bot: {bot_response}")
     
     # Tampilkan chat history
+    st.subheader("Percakapan")
     for msg in st.session_state.chat_history:
-        if msg["sender"] == "user":
-            st.chat_message("user").write(msg["message"])
-        else:
-            st.chat_message("assistant").write(msg["message"])
+        st.write(msg)
+    
+    if st.button("Kembali ke Beranda"):
+        st.session_state.current_page = "Beranda"
+        st.rerun()
 
 if __name__ == "__main__":
     main()
 
-   
