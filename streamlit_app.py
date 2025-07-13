@@ -1,5 +1,4 @@
 import streamlit as st
-import random
 import time
 
 # Data senyawa organik
@@ -55,6 +54,18 @@ def calculate_average_rating(compound_name):
 def main():
     st.set_page_config(page_title="O-Kimiaku", page_icon="🧪", layout="wide")
     
+    # Custom CSS for background
+    st.markdown(
+        """
+        <style>
+        .reportview-container {
+            background: url('https://your-chemistry-background-image-url.com') no-repeat center center fixed; 
+            background-size: cover;
+        }
+        </style>
+        """, unsafe_allow_html=True
+    )
+    
     # Inisialisasi session state untuk halaman aktif
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "Beranda"
@@ -66,16 +77,12 @@ def main():
         # Membuat navigasi tanpa radio button
         if st.button("Beranda", use_container_width=True):
             st.session_state.current_page = "Beranda"
-        if st.button("Rating", use_container_width=True):
-            st.session_state.current_page = "Rating"
         if st.button("ChatBot", use_container_width=True):
             st.session_state.current_page = "ChatBot"
     
     # Render halaman berdasarkan state
     if st.session_state.current_page == "Beranda":
         show_home()
-    elif st.session_state.current_page == "Rating":
-        show_ratings()
     elif st.session_state.current_page == "ChatBot":
         show_chatbot()
 
@@ -104,7 +111,7 @@ def show_home():
     cols = st.columns(2)
     for i, (compound_name, compound_info) in enumerate(compounds.items()):
         with cols[i % 2]:
-            with st.container(border=True):
+            with st.container():
                 st.subheader(compound_name)
                 st.write(f"*Rumus Kimia:* {compound_info['rumus_kimia']}")
                 st.write(f"*Titik Didih:* {compound_info['titik_didih']}")
@@ -114,7 +121,6 @@ def show_home():
 
 # Fungsi untuk menampilkan detail senyawa
 def show_compound_detail(compound_name):
-    st.session_state.current_page = "CompoundDetail"
     compound_info = compounds[compound_name]
     
     st.title(compound_name)
@@ -139,37 +145,7 @@ def show_compound_detail(compound_name):
     
     if st.button("Kembali ke Beranda"):
         st.session_state.current_page = "Beranda"
-        st.rerun()
-
-# Halaman Rating
-def show_ratings():
-    st.title("Rating Senyawa")
-    
-    # Pilih senyawa
-    compound_name = st.selectbox("Pilih Senyawa:", list(compounds.keys()))
-    
-    # Tampilkan rating saat ini
-    avg_rating = calculate_average_rating(compound_name)
-    st.subheader(f"Rating untuk {compound_name}")
-    st.write(f"⭐ Rating Rata-rata: {avg_rating:.1f}/5 dari {len(compounds[compound_name].get('reviews', []))} ulasan")
-    
-    # Form rating sederhana
-    st.subheader("Beri Rating")
-    rating = st.slider("Pilih rating (1-5 bintang):", 1, 5, 3)
-    
-    if st.button("Submit Rating"):
-        if "reviews" not in compounds[compound_name]:
-            compounds[compound_name]["reviews"] = []
-        
-        compounds[compound_name]["reviews"].append({
-            "rating": rating,
-            "review": ""
-        })
-        st.success(f"Terima kasih! Anda memberi rating {rating} bintang untuk {compound_name}")
-    
-    if st.button("Kembali ke Beranda"):
-        st.session_state.current_page = "Beranda"
-        st.rerun()
+        st.experimental_rerun()
 
 # Halaman ChatBot
 def show_chatbot():
@@ -201,7 +177,39 @@ def show_chatbot():
     
     if st.button("Kembali ke Beranda"):
         st.session_state.current_page = "Beranda"
-        st.rerun()
+        st.experimental_rerun()
 
-if _name_ == "_main_":
+# Halaman Rating
+def show_ratings():
+    st.subheader("Rating Senyawa")
+    
+    # Pilih senyawa
+    compound_name = st.selectbox("Pilih Senyawa:", list(compounds.keys()))
+    
+    # Tampilkan rating saat ini
+    avg_rating = calculate_average_rating(compound_name)
+    st.write(f"⭐ Rating Rata-rata: {avg_rating:.1f}/5 dari {len(compounds[compound_name].get('reviews', []))} ulasan")
+    
+    # Form rating sederhana
+    st.subheader("Beri Rating")
+    rating = st.slider("Pilih rating (1-5 bintang):", 1, 5, 3)
+    
+    if st.button("Submit Rating"):
+        compounds[compound_name]["reviews"].append({
+            "rating": rating,
+            "review": ""
+        })
+        st.success(f"Terima kasih! Anda memberi rating {rating} bintang untuk {compound_name}")
+
+    if st.button("Kembali ke Beranda"):
+        st.session_state.current_page = "Beranda"
+        st.experimental_rerun()
+
+# Call the rating function at the end of the application
+def show_final_rating():
+    st.header("Rating Akhir")
+    show_ratings()
+
+if __name__ == "__main__":
     main()
+    show_final_rating()  # Call the rating section at the end
