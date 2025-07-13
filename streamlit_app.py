@@ -52,11 +52,10 @@ def show_home():
             st.success(f"Terima kasih! Anda memberi rating {rating} bintang untuk {compound_name}.")
 
 # Halaman Rating
-def show_rating():
-    st.title("Rating Senyawa")
-    for compound_name, compound_info in compounds.items():
-        st.subheader(compound_name)
-        st.write(f"Rating saat ini: {compound_info['rating']} bintang")
+sentiment_mapping = ["one", "two", "three", "four", "five"]
+selected = st.feedback("stars")
+if selected is not None:
+    st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
 
 # Halaman Chatbot
 def show_chatbot():
