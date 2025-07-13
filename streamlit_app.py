@@ -44,14 +44,13 @@ def chatbot_response(user_input):
     else:
         return "Maaf, saya tidak mengerti pertanyaan Anda. Silakan tanyakan tentang senyawa organik atau fitur aplikasi ini."
 
-# Fungsi untuk menghitung rating
-import streamlit as st
+# Fungsi untuk menghitung rating rata-rata
+def calculate_average_rating(compound_name):
+    reviews = compounds[compound_name].get("reviews", [])
+    if not reviews:
+        return 0
+    return sum(review['rating'] for review in reviews) / len(reviews)
 
-sentiment_mapping = ["one", "two", "three", "four", "five"]
-selected = st.feedback("stars")
-if selected is not None:
-    st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
-    
 # Layout utama
 def main():
     st.set_page_config(page_title="O-Kimiaku", page_icon="🧪", layout="wide")
