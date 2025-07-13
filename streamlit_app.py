@@ -51,10 +51,10 @@ sentiment_mapping = ["one", "two", "three", "four", "five"]
 selected = st.feedback("stars")
 if selected is not None:
     st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
-
+    
 # Layout utama
 def main():
-    st.set_page_config(page_title="O-Kimiaku", page_icon="🧪", layout="centered")
+    st.set_page_config(page_title="O-Kimiaku", page_icon="🧪", layout="wide")
     
     # Inisialisasi session state untuk halaman aktif
     if 'current_page' not in st.session_state:
@@ -88,7 +88,7 @@ def show_home():
         st.image("https://placehold.co/300x200?text=O-Kimiaku+Logo", width=200)
     
     with col2:
-        st.title("O-Kimiaku")
+        st.title("O-Kimiaku - Explorer Senyawa Organik")
         st.write("""
         Aplikasi ini membantu Anda mempelajari sifat-sifat senyawa organik seperti:
         - Titik didih dan titik leleh
@@ -205,5 +205,4 @@ def show_chatbot():
         st.rerun()
 
 if _name_ == "_main_":
-    main()import streamlit as st
-import webbrowser
+    main()
