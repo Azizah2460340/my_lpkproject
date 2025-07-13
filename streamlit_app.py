@@ -1,8 +1,8 @@
 import streamlit as st
 
-st.write("Hello, *World!* :sunglasses:")
+st.write("S, *World!* :sunglasses:")
 
-st.title("🎈 My new app")
+st.title("SELAMAT DATANG DI O-KIMIAKU")
 
 st.markdown("*Streamlit* is **really** ***cool***.")
  
