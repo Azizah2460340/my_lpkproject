@@ -25,7 +25,7 @@ def main():
 
     # Sidebar untuk navigasi
     st.sidebar.title("Menu")
-    menu_options = ["Beranda", "Rating", "Chatbot"]
+    menu_options = ["Beranda", "Rating", "Chatbot", "About Us"]
     choice = st.sidebar.selectbox("Pilih Menu", menu_options)
 
     if choice == "Beranda":
@@ -34,10 +34,25 @@ def main():
         show_rating()
     elif choice == "Chatbot":
         show_chatbot()
+    elif choice == "About Us":
+        show_about_us()
 
 # Halaman Beranda
 def show_home():
-    st.title("Selamat datang di O-Kimiaku")
+    st.markdown(
+        """
+        <style>
+        .background {
+            background-color: #f0f8ff;
+            background-image: linear-gradient(to right, #ff7e5f, #feb47b);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        </style>
+        """, unsafe_allow_html=True
+    )
+    
+    st.title("Selamat datang di Aplikasi O-Kimiaku")
     st.write("Mari eksplorasi dunia senyawa organik bersama kami!")
 
     for compound_name, compound_info in compounds.items():
@@ -52,10 +67,11 @@ def show_home():
             st.success(f"Terima kasih! Anda memberi rating {rating} bintang untuk {compound_name}.")
 
 # Halaman Rating
-sentiment_mapping = ["one", "two", "three", "four", "five"]
-selected = st.feedback("stars")
-if selected is not None:
-    st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
+def show_rating():
+    sentiment_mapping = ["one", "two", "three", "four", "five"]
+    selected = st.selectbox("Pilih rating bintang:", options=[1, 2, 3, 4, 5])
+    if selected is not None:
+        st.markdown(f"You selected {sentiment_mapping[selected - 1]} star(s).")
 
 # Halaman Chatbot
 def show_chatbot():
@@ -65,6 +81,19 @@ def show_chatbot():
         st.write(f"Anda bertanya: {user_input}")
         # Simulate a response
         st.write("Bot: Maaf, saya tidak mengerti pertanyaan Anda.")
+
+# Halaman About Us
+def show_about_us():
+    st.title("Tentang Kami")
+    st.write("""
+    Aplikasi O-Kimiaku dikembangkan oleh tim pengembang yang berkomitmen untuk memberikan informasi yang akurat dan menarik tentang senyawa organik. 
+    Kami percaya bahwa pemahaman tentang kimia sangat penting dalam kehidupan sehari-hari dan ingin membuatnya lebih mudah diakses oleh semua orang.
+    
+    **Tim Pengembang:**
+    - Nama 1: Pengembang Utama
+    - Nama 2: Desainer UI/UX
+    - Nama 3: Analis Data
+    """)
 
 if __name__ == "__main__":
     main()
