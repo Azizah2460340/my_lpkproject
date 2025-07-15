@@ -432,8 +432,8 @@ def show_chatbot():
                 st.info("Benzena adalah senyawa aromatik dengan struktur cincin.")
 
 
-            else:
-                st.warning("Maaf, senyawa tersebut belum tersedia atau belum dikenali.")
+     else:
+        st.warning("Maaf, senyawa tersebut belum tersedia atau belum dikenali.")
 
 def show_about():
     st.title("Tentang Kami 👨‍💻")
