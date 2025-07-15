@@ -103,13 +103,11 @@ def show_alkana():
     - CH₃–CH₃ → Etana
     - CH₃–CH₂–CH₃ → Propana
     - CH₃–CH(CH₃)–CH₃ → 2-Metilpropana (bentuk bercabang)
-    """)
-
 def show_alkena():
     st.title("Detail Senyawa: Alkena")
 
     st.markdown("""
-    **Deskripsi:** Alkena adalah senyawa hidrokarbon tak jenuh yang memiliki setidaknya satu ikatan rangkap dua (C=C) antar atom karbon. Rumus umumnya CₙH₂ₙ. Alkena lebih reaktif dibanding alkana karena keberadaan ikatan π.
+    **Deskripsi**: Alkena adalah senyawa hidrokarbon tak jenuh yang memiliki setidaknya satu ikatan rangkap dua (C=C) antar atom karbon. Rumus umumnya CₙH₂ₙ. Alkena lebih reaktif dibanding alkana karena keberadaan ikatan π.
 
     **Titik Didih:**
     - Titik didih alkena meningkat seiring bertambahnya jumlah atom karbon.
@@ -131,6 +129,12 @@ def show_alkena():
     - CH₂=CH₂ → Etena
     - CH₂=CH–CH₃ → Propena
     - CH₃–CH=CH–CH₃ → But-2-ena (atau but-1-ena tergantung posisi ikatan)
+    
+    **Video Penjelasan:**
+    - [Video 1](https://youtu.be/0PaL8klVuVk?si=uffV4qvXCCU3dECi)
+    - [Video 2](https://youtu.be/q3DhWJGolc4?si=PaTK0I6EXThce20i)
+    - [Video 3](https://youtu.be/dJmVLfJtqtw?si=Eu1-KVcokh717JkY)
+    - [Video 4](https://youtu.be/Utu6uZG_Glk?si=0xjgh6JQT0QjoURW)
     """)
 
 def show_alkuna():
@@ -159,6 +163,10 @@ def show_alkuna():
     - CH≡CH → Etuna (asetilena)
     - CH≡C–CH₃ → Propuna
     - CH₃–C≡C–CH₃ → But-2-una
+
+     **Video Penjelasan:**
+    - [Video 1](https://youtu.be/pbDiXi3ny1E?si=sWfZ3UswqewTWuzm)
+    - [Video 2](https://youtu.be/mGQprCdRZ4s?si=h5ST0P2OYVC0oYWs)
     """)
 
 def show_alkohol():
@@ -190,6 +198,10 @@ def show_alkohol():
     - CH₃CH₂OH → Etanol
     - CH₃CH(OH)CH₃ → 2-Propanol
     - HO–CH₂–CH₂–OH → 1,2-Etanadiol (etilen glikol)
+
+     **Video Penjelasan:**
+    - [Video](https://youtu.be/1nfKdKFOxgw?si=FNi98kksQ-_FV0ki)
+    - [Video](https://youtu.be/-GvgmYqdpHA?si=cn2Y7ulIVFOAKKSM)
     """)
     
 def show_protein():
@@ -221,6 +233,11 @@ def show_protein():
         - Insulin → hormon pengatur gula darah
         - Hemoglobin → pengangkut oksigen
         - Amilase → enzim pemecah pati
+
+    **Video Penjelasan:**
+    - [Video 1](https://youtu.be/3kybW5T76Ek?si=dbybMp0ObIBrrqit)
+    - [Video 2](https://youtu.be/DnTwLYWG1fQ?si=9tF5RLdkrA__M3bl)
+    - [Video 3](https://youtu.be/tLdCWZvODXg?si=PeFbccfuF7hYveUV)
     """)
 
 def show_fenol():
@@ -244,6 +261,13 @@ def show_fenol():
     - Jika fenol memiliki substituen, penamaannya mengikuti posisi pada cincin, misalnya:
         - o-Kresol (2-metilfenol) → gugus metil di posisi orto
         - p-Nitrofenol (4-nitrobenzenol) → gugus nitro di posisi para
+
+    **Video Penjelasan:**
+    - [Video 1](https://youtu.be/euFL7iukzms?si=wzLy8DIb3YFjw3N6)
+    - [Video 2](https://youtu.be/oXw9Pg6ekwc?si=0ry7qAdmJ9GOVk5b)
+    - [Video 3](https://youtu.be/A8GQHwidRSI?si=_noRE0NT56t0GTFC)
+    - [Video 4](https://youtu.be/-xGXGGM909M?si=RrCRHm2SlgTrIM00)
+    - [Video 5](https://youtu.be/uQ7IcLkO9uE?si=Ar3XpPtTHi8hTaBD)
     """)
 def show_eter():
     st.title("Detail Senyawa: Eter")
@@ -275,6 +299,9 @@ def show_eter():
     - CH₃OCH₃ → Dimetil eter
     - C₂H₅OCH₃ → Eter metil etil
     - C₃H₇OCH₂CH₃ → Eter etil propil
+
+    **Video Penjelasan:**
+    - [Video](https://youtu.be/YGLRGqprGcQ?si=iDnthU2BN_Ugqvh2)
     """)
 
 def show_aldehida():
@@ -304,6 +331,12 @@ def show_aldehida():
     - HCHO → Metanal (formaldehida)
     - CH₃CHO → Etanal (asetaldehida)
     - CH₃CH₂CH₂CHO → Butanal
+
+     **Video Penjelasan:**
+    - [Video 1](https://youtu.be/I8i8jr3lieo?si=rbVQW0x8nC8Lj8y7)
+    - [Video 2](https://youtu.be/KbF0gH4BURY?si=ZvG64m-NHkVHnT0p)
+    - [Video 3](https://youtu.be/p3jf_RKbdcI?si=WgZKm_4gXnY3SXQl)
+    - [Video 4](https://youtu.be/-_nL-qb0xN4?si=vkFi5jboEEU5u5ov)
     """)
 
 def show_keton():
@@ -333,6 +366,12 @@ def show_keton():
         - CH₃COCH₃ → Propanon (aseton)
         - CH₃CH₂COCH₃ → Butanon
         - CH₃COCH₂CH₂CH₃ → Pentan-2-on
+
+         **Video Penjelasan:**
+    - [Video 1](https://youtu.be/I8i8jr3lieo?si=rbVQW0x8nC8Lj8y7)
+    - [Video 2](https://youtu.be/KbF0gH4BURY?si=ZvG64m-NHkVHnT0p)
+    - [Video 3](https://youtu.be/p3jf_RKbdcI?si=WgZKm_4gXnY3SXQl)
+    - [Video 4](https://youtu.be/-_nL-qb0xN4?si=vkFi5jboEEU5u5ov)
     """)
 
 def show_amina():
@@ -366,39 +405,9 @@ def show_amina():
             - (CH₃)₂NH → Dimetilamina
         - Untuk yang lebih kompleks → dianggap substituen: “amino-”
             - NH₂CH₂CH₃ → 2-Aminoetana
-    """)
-def show_asam_karboksilat():
-    st.title("Detail Senyawa: Asam Karboksilat")
 
-    st.markdown("""
-    **Deskripsi:** Asam karboksilat adalah senyawa organik yang memiliki gugus karboksil (–COOH), yaitu gabungan dari gugus karbonil (C=O) dan hidroksil (–OH) pada karbon yang sama. Rumus umum: R–COOH. Senyawa ini bersifat asam lemah dan banyak ditemukan dalam alam, seperti dalam cuka (asam asetat) dan lemak (asam lemak).
-
-    **Titik Didih:**
-    - Sangat tinggi dibanding alkohol, karena asam karboksilat membentuk ikatan hidrogen ganda (dimer) yang kuat antar molekul.
-    - Titik didih meningkat seiring bertambahnya jumlah atom karbon.
-    - Contoh:
-        - Asam format (HCOOH): 100,8 °C
-        - Asam asetat (CH₃COOH): 118,1 °C
-        - Asam butirat (CH₃CH₂CH₂COOH): 163,7 °C
-
-    **Kepolaran:** Sangat polar, karena mengandung gugus karbonil dan hidroksil sekaligus. Sangat larut dalam air (terutama rantai pendek), karena dapat membentuk ikatan hidrogen dengan air. Rantai panjang → kelarutan menurun karena bagian hidrokarbon makin dominan.
-
-    **Ikatan Kimia:**
-    - Mengandung:
-        - Ikatan sigma (σ) dan pi (π) pada C=O.
-        - Ikatan sigma antara C–O dan O–H.
-        - Atom karbon pada –COOH bersifat sp² hibridisasi, dengan bentuk planar trigonal.
-        - Dapat melepaskan proton (H⁺) dari gugus –OH → bersifat asam lemah.
-
-    **Tata Nama (IUPAC):** Penamaan asam karboksilat:
-    1. Rantai utama mencakup gugus –COOH.
-    2. Nomor 1 selalu diberikan pada karbon karboksilat.
-    3. Nama alkana diganti akhiran -a menjadi -oat (untuk garam/ester) atau -oat ion (untuk ionik), tetapi untuk asam murni: -oat tetap disebut “asam -oat”.
-
-    **Contoh:**
-        - HCOOH → Asam metanoat (asam format)
-        - CH₃COOH → Asam etanoat (asam asetat)
-        - CH₃CH₂CH₂COOH → Asam butanoat (asam butirat)
+     **Video Penjelasan:**
+    - [Video](https://youtu.be/0aDWKCzWHuw?si=PEakWNqHfsdPiKK7)      
     """)
     
 def show_lemak_dan_minyak():
@@ -438,6 +447,11 @@ def show_lemak_dan_minyak():
         - Contoh:
             - Tristearin → dari 3 asam stearat + gliserol
             - Triolein → dari 3 asam oleat + gliserol
+
+    **Video Penjelasan:**
+    - [Video 1](https://youtu.be/PRyOFFzh9pc?si=PbSculDk-wzSFw4X)
+    - [Video 2](https://youtu.be/RVcw6IdUJLo?si=1KdUGjLdsnToKNul)
+    - [Video 3](https://youtu.be/aUdP3JJhBRA?si=AA331_st2qhTQi15)
     """)
 
 def show_benzena():
@@ -467,7 +481,50 @@ def show_benzena():
         - C₆H₅OH → hidroksibenzena (fenol)
         - C₆H₅NO₂ → nitrobenzena
     - Jika ada dua substituen: orto (1,2), meta (1,3), para (1,4) digunakan untuk posisi relatifnya.
+
+    **Video Penjelasan:**
+    - [Video 1](https://youtu.be/1aluQZqkqNE?si=c6fzD0HlqDrRDzgc)
+    - [Video 2](https://youtu.be/YMHdLlx6WIw?si=3fy86L1X57yMDUiW)
+    - [Playlist](https://youtube.com/playlist?list=PLWB5gICYvKUXBVat1VVyDzNhhCcz1Y4Wt&si=Cd5F1txXJxLR8Zg3)
     """)
+
+def show_asam_karboksilat():
+    st.title("Detail Senyawa: Asam Karboksilat")
+
+    st.markdown("""
+    **Deskripsi:** Asam karboksilat adalah senyawa organik yang memiliki gugus karboksil (–COOH), yaitu gabungan dari gugus karbonil (C=O) dan hidroksil (–OH) pada karbon yang sama. Rumus umum: R–COOH. Senyawa ini bersifat asam lemah dan banyak ditemukan dalam alam, seperti dalam cuka (asam asetat) dan lemak (asam lemak).
+
+    **Titik Didih:**
+    - Sangat tinggi dibanding alkohol, karena asam karboksilat membentuk ikatan hidrogen ganda (dimer) yang kuat antar molekul.
+    - Titik didih meningkat seiring bertambahnya jumlah atom karbon.
+    - Contoh:
+        - Asam format (HCOOH): 100,8 °C
+        - Asam asetat (CH₃COOH): 118,1 °C
+        - Asam butirat (CH₃CH₂CH₂COOH): 163,7 °C
+
+    **Kepolaran:** Sangat polar, karena mengandung gugus karbonil dan hidroksil sekaligus. Sangat larut dalam air (terutama rantai pendek), karena dapat membentuk ikatan hidrogen dengan air. Rantai panjang → kelarutan menurun karena bagian hidrokarbon makin dominan.
+
+    **Ikatan Kimia:**
+    - Mengandung:
+        - Ikatan sigma (σ) dan pi (π) pada C=O.
+        - Ikatan sigma antara C–O dan O–H.
+        - Atom karbon pada –COOH bersifat sp² hibridisasi, dengan bentuk planar trigonal.
+        - Dapat melepaskan proton (H⁺) dari gugus –OH → bersifat asam lemah.
+
+    **Tata Nama (IUPAC):** Penamaan asam karboksilat:
+    1. Rantai utama mencakup gugus –COOH.
+    2. Nomor 1 selalu diberikan pada karbon karboksilat.
+    3. Nama alkana diganti akhiran -a menjadi -oat (untuk garam/ester) atau -oat ion (untuk ionik), tetapi untuk asam murni: -oat tetap disebut “asam -oat”.
+
+    **Contoh:**
+    - HCOOH → Asam metanoat (asam format)
+    - CH₃COOH → Asam etanoat (asam asetat)
+    - CH₃CH₂CH₂COOH → Asam butanoat (asam butirat)
+
+    **Video Penjelasan:**
+    - [Video](https://youtu.be/6xoYyrJkboI?si=D78Rh0NJCbmykDyg)
+    """)
+    
 def show_amida():
     st.title("Detail Senyawa: Amida")
 
@@ -502,6 +559,10 @@ def show_amida():
     - HCONH₂ → Metanamida (formamida)
     - CH₃CONHCH₃ → N-Metiletanamida
     - CH₃CON(CH₃)₂ → N,N-Dimetiletanamida
+
+     **Video Penjelasan:**
+    - [Video 1](https://youtu.be/Lz78W5L6bR4?si=eJtoQx5LpYcMfwYv)
+    - [Video 2](https://youtu.be/CYYGb1tCTAs?si=upVbkqTxI-3nPTGi)
     """)
 def show_alkil_halida():
     st.title("Detail Senyawa: Alkil Halida")
@@ -540,6 +601,9 @@ def show_alkil_halida():
     - CH₃CH₂Br → Bromometana
     - CH₃CH(Cl)CH₃ → 2-Kloropropana
     - CH₃CHBrCH₂CH₃ → 2-Bromobutana
+
+    **Video Penjelasan:**
+    - [Video](https://youtu.be/zxUFOd1shr0?si=5IPjGEpazI6zGcDd)
     """)
 def show_nitro():
     st.title("Detail Senyawa: Nitro")
@@ -575,6 +639,10 @@ def show_nitro():
     - CH₃CH₂NO₂ → Nitroetana
     - C₆H₅NO₂ → Nitrobenzena
     - C₆H₄(NO₂)₂ → 1,3-Dinitrobenzena (atau meta-dinitrobenzena)
+
+    **Video Penjelasan:**
+    - [Video 1](https://youtu.be/LbL3qLDL1ww?si=BXQwimr12FWda-Up)
+    - [Video 2](https://youtu.be/LbL3qLDL1ww?si=SyugwAr2P8SWabpU)
     """)
 
 def show_nitril():
@@ -611,6 +679,9 @@ def show_nitril():
     - C₆H₅–C≡N → Benzenakarbonitril (nama umum: benzonitril)
     - CH₂=CH–C≡N → Akrilonitril
     - NC–CH₂–CH₂–COOH → Asam sianopropanoat
+
+    **Video Penjelasan:**
+    - [Video](https://youtu.be/JktYNjqt4wU?si=nc-IBD-rUnUPYFXU)
     """)
 
 def show_ester():
@@ -648,6 +719,9 @@ def show_ester():
     - CH₃COOCH₂CH₃ → Etil etanoat
     - CH₃CH₂COOCH₃ → Metil propanoat
     - CH₃CH₂COOCH₂CH₃ → Etil propanoat
+
+**Video Penjelasan:**
+    - [Video](https://youtu.be/6BO-ZWmLLSU?si=fMfpCo91cfeRrnOq)
     """)
 
 def show_asam_halida():
@@ -683,6 +757,9 @@ def show_asam_halida():
     - CH₃COCl → Etanoil klorida (asetil klorida)
     - C₂H₅COBr → Propanoil bromida
     - C₆H₅COCl → Benzoil klorida
+
+    **Video Penjelasan:**
+    - [Video](https://youtu.be/w3j3gNN4gSs?si=L7pmPIGBTUhbvh_D)
     """)
     
 def show_karbohidrat():
@@ -716,6 +793,10 @@ def show_karbohidrat():
         - Glukosa + fruktosa → sukrosa
         - Glukosa + glukosa → maltosa
         - Polimer glukosa → amilosa (dalam pati), selulosa, glikogen
+
+    **Video Penjelasan:**
+    - [Playlist](https://youtube.com/playlist?list=PLWB5gICYvKUXj77oa7c6FOtQMAXtmXSVc&si=Y_aCjbigtRXHNUdJ)
+    - [Video](https://youtu.be/xynTeSAl4Ts?si=EcQIPYeB5Y5k11Mf)
     """)
 
 def show_chatbot():
@@ -834,19 +915,6 @@ def show_chatbot():
                 st.success("🔗 [Tonton Penjelasan Lemak dan Minyak di YouTube](https://www.youtube.com/watch?v=2CK7zTJdXXo)")
             else:
                 st.info("Lemak dan minyak adalah bagian dari kelompok lipid.")
-        if "benzena" in q:
-            if "kepolaran" in q:
-                st.success("Benzena bersifat nonpolar dan tidak larut dalam air.")
-            elif "rumus" in q or "gugus" in q:
-                st.success("Rumus benzena: C₆H₆.")
-            elif "titik" in q:
-                st.success("Titik didih benzena: 80,1 °C.")
-            elif "fakta" in q:
-                st.success("Benzena adalah senyawa hidrokarbon aromatik paling sederhana.")
-            elif "video" in q:
-                st.success("🔗 [Tonton Penjelasan Benzena di YouTube](https://www.youtube.com/watch?v=2CK7zTJdXXo)")
-            else:
-                st.info("Benzena adalah senyawa aromatik dengan struktur cincin.")
         if "alkil halida" in q:
             if "kepolaran" in q:
                 st.success("Alkil halida bersifat polar karena perbedaan elektronegativitas antara C dan halogen.")
@@ -912,8 +980,99 @@ def show_chatbot():
                 st.success("🔗 [Tonton Penjelasan Asam Halida di YouTube](https://www.youtube.com/watch?v=2CK7zTJdXXo)")
             else:
                 st.info("Asam halida adalah turunan dari asam karboksilat.")
-        else:
-            st.warning("Maaf, senyawa tersebut belum tersedia atau belum dikenali.")
+        if "alkohol" in q:
+            if "kepolaran" in q:
+                st.success("Alkohol bersifat polar karena adanya gugus hidroksil (–OH).")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus umum alkohol: R–OH.")
+            elif "titik" in q:
+                st.success("Titik didih alkohol lebih tinggi dibandingkan alkana dan alkena.")
+            elif "fakta" in q:
+                st.success("Alkohol dapat larut dalam air karena membentuk ikatan hidrogen.")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Alkohol di YouTube](https://www.youtube.com/watch?v=example)")
+            else:
+                st.info("Alkohol adalah senyawa organik yang memiliki gugus hidroksil (–OH).")
+        if "fenol" in q:
+            if "kepolaran" in q:
+                st.success("Fenol adalah senyawa polar karena adanya gugus hidroksil (–OH).")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus fenol: C₆H₅OH.")
+            elif "titik" in q:
+                st.success("Titik didih fenol lebih tinggi dari benzena karena ikatan hidrogen.")
+            elif "fakta" in q:
+                st.success("Fenol bersifat korosif dan memiliki bau khas tajam.")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Fenol di YouTube](https://www.youtube.com/watch?v=example)")
+            else:
+                st.info("Fenol adalah senyawa aromatik yang terdiri dari cincin benzena dan gugus hidroksil.")        
+        if "alkana" in q:
+            if "kepolaran" in q:
+                st.success("Alkana adalah senyawa nonpolar karena distribusi elektron seimbang.")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus umum alkana: CnH₂n+2.")
+            elif "titik" in q:
+                st.success("Titik didih alkana meningkat seiring bertambahnya jumlah atom karbon.")
+            elif "fakta" in q:
+                st.success("Alkana merupakan komponen utama dalam gas alam dan minyak bumi.")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Alkana di YouTube](https://www.youtube.com/watch?v=example)")
+            else:
+                st.info("Alkana adalah senyawa hidrokarbon jenuh yang hanya mengandung ikatan tunggal.")
+        if "alkena" in q:
+            if "kepolaran" in q:
+                st.success("Alkena umumnya nonpolar, tetapi sedikit lebih polar dari alkana.")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus umum alkena: CnH₂n.")
+            elif "titik" in q:
+                st.success("Titik didih alkena sedikit lebih rendah dibandingkan alkana dengan jumlah C yang sama.")
+            elif "fakta" in q:
+                st.success("Alkena lebih reaktif dibanding alkana karena adanya ikatan rangkap.")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Alkena di YouTube](https://www.youtube.com/watch?v=example)")
+            else:
+                st.info("Alkena adalah senyawa hidrokarbon tak jenuh dengan setidaknya satu ikatan rangkap dua.")
+        if "alkuna" in q:
+            if "kepolaran" in q:
+                st.success("Sebagian besar alkuna adalah nonpolar.")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus umum alkuna: CnH₂n−2.")
+            elif "titik" in q:
+                st.success("Titik didih alkuna meningkat seiring jumlah atom karbon.")
+            elif "fakta" in q:
+                st.success("Alkuna sangat reaktif dan dapat mengalami reaksi adisi.")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Alkuna di YouTube](https://www.youtube.com/watch?v=example)")
+            else:
+                st.info("Alkuna adalah senyawa hidrokarbon tak jenuh dengan setidaknya satu ikatan rangkap tiga.")
+        if "aldehid" in q:
+            if "kepolaran" in q:
+                st.success("Aldehid sangat polar karena gugus karbonil (C=O).")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus umum aldehid: R–CHO.")
+            elif "titik" in q:
+                st.success("Titik didih aldehid lebih tinggi dari alkana, tetapi lebih rendah dari alkohol.")
+            elif "fakta" in q:
+                st.success("Aldehid banyak ditemukan dalam zat aroma dan sintesis organik.")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Aldehid di YouTube](https://www.youtube.com/watch?v=example)")
+            else:
+                st.info("Aldehid adalah senyawa organik dengan gugus karbonil di ujung rantai.")
+        if "eter" in q:
+            if "kepolaran" in q:
+                st.success("Eter umumnya nonpolar, tetapi dapat sedikit polar tergantung pada struktur.")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus umum eter: R–O–R′, di mana R dan R′ adalah gugus alkil.")
+            elif "titik" in q:
+                st.success("Titik didih eter lebih rendah dibandingkan alkohol, tetapi lebih tinggi dari alkana.")
+            elif "fakta" in q:
+                st.success("Eter sering digunakan sebagai pelarut dalam reaksi kimia.")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Eter di YouTube](https://www.youtube.com/watch?v=example)")
+            else:
+                st.info("Eter adalah senyawa organik yang mengandung gugus eter (–O–) antara dua gugus alkil.")    
+    else:
+        st.warning("Maaf, senyawa tersebut belum tersedia atau belum dikenali.")
 
 def show_about():
     st.title("Tentang Kami 👨‍💻")
@@ -967,7 +1126,7 @@ elif st.session_state.page == 'rating':
     show_rating()
 elif st.session_state.page == 'amina':
     show_amina()
-elif st.session_state.page == 'alkil halida':
+elif st.session_state.page == 'alkil_halida':
     show_alkil_halida()
 elif st.session_state.page == 'nitril':
     show_nitril()
@@ -977,7 +1136,7 @@ elif st.session_state.page == 'nitro':
     show_nitro()
 elif st.session_state.page == 'keton':
     show_keton()
-elif st.session_state.page == 'asam halida':
+elif st.session_state.page == 'asam_halida':
     show_asam_halida()
 elif st.session_state.page == 'ester':
     show_ester()
@@ -993,13 +1152,13 @@ elif st.session_state.page == 'fenol':
     show_fenol()
 elif st.session_state.page == 'benzena':
     show_benzena()
-elif st.session_state.page == 'asam karboksilat':
+elif st.session_state.page == 'asam_karboksilat':
     show_asam_karboksilat()
 elif st.session_state.page == 'amida':
     show_amida()
 elif st.session_state.page == 'protein':
     show_protein()
-elif st.session_state.page == 'lemak dan minyak':
+elif st.session_state.page == 'lemak_dan_minyak':
     show_lemak_dan_minyak()
 elif st.session_state.page == 'eter':
     show_eter()
