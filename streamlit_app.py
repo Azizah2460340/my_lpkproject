@@ -1,670 +1,519 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O-Kimiaku - Aplikasi Pembelajaran Kimia</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8fafc;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar {
-            width: 300px;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .sidebar.active {
-            transform: translateX(0);
-        }
-        
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 10;
-        }
-        
-        .overlay.active {
-            display: block;
-        }
-        
-        .compound-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .compound-info {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .compound-info.active {
-            max-height: 500px;
-        }
-        
-        .rating-stars {
-            direction: rtl;
-            unicode-bidi: bidi-override;
-        }
-        
-        .rating-stars input {
-            display: none;
-        }
-        
-        .rating-stars label {
-            color: #d1d5db;
-            font-size: 2rem;
-            padding: 0 5px;
-            cursor: pointer;
-        }
-        
-        .rating-stars input:checked ~ label,
-        .rating-stars label:hover,
-        .rating-stars label:hover ~ label {
-            color: #f59e0b;
-        }
-        
-        .chat-message {
-            max-width: 70%;
-            padding: 0.75rem;
-            border-radius: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .user-message {
-            background-color: #3b82f6;
-            color: white;
-            margin-left: auto;
-            border-bottom-right-radius: 0.25rem;
-        }
-        
-        .bot-message {
-            background-color: #e5e7eb;
-            margin-right: auto;
-            border-bottom-left-radius: 0.25rem;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 280px;
-            }
-        }
-    </style>
-</head>
-<body class="min-h-screen">
-    <nav class="bg-indigo-600 text-white p-4 shadow-md flex justify-between items-center fixed w-full z-20">
-        <button id="menuBtn" class="text-white focus:outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-        <h1 class="text-xl font-bold">O-Kimiaku</h1>
-        <div class="w-6"></div>
-    </nav>
+import streamlit as st
+from PIL import Image
+import time
 
-    <div class="overlay" id="overlay"></div>
+# Konfigurasi halaman
+st.set_page_config(
+    page_title="O-Kimiaku",
+    page_icon="🧪",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+    
+# ------------- FUNGSI --------------
+def show_home():
+    st.title("Selamat Datang di O-KimiaKu 👩‍🔬🧪")
 
-    <aside class="sidebar bg-white fixed h-full shadow-lg z-30 p-4" id="sidebar">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-indigo-600">Menu</h2>
-            <button id="closeMenuBtn" class="text-gray-500 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        
-        <nav>
-            <ul class="space-y-2">
-                <li>
-                    <button id="homeBtn" class="w-full text-left px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-medium">
-                        Beranda
-                    </button>
-                </li>
-                <li>
-                    <button id="chatbotBtn" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100">
-                        Chatbot Kimia
-                    </button>
-                </li>
-                <li>
-                    <button id="aboutBtn" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100">
-                        Tentang Kami
-                    </button>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+    st.markdown("""
+    **O-KimiaKu** adalah aplikasi pembelajaran interaktif kimia yang memberikan informasi penting tentang senyawa kimia, seperti:
+    - ✅ Tatanama Senyawa
+    - 🌡️ Titik Didih dan Titik Leleh
+    - 🤓 Fun Fact Kimia
+    - ⚖️ Kepolaran
+    - 🧬 Rumus Kimia
 
-    <main class="pt-16 pb-20 px-4" id="mainContent">
-        <!-- Beranda Section -->
-        <section id="homeSection">
-            <div class="container mx-auto py-8">
-                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-                    <div class="p-6 md:p-8">
-                        <div class="flex flex-col items-center text-center mb-6">
-                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/234f84c5-c840-4614-adf0-57fa840f39dd.png" alt="Ilustrasi laboratorium kimia modern dengan peralatan seperti tabung reaksi, gelas kimia, dan mikroskop" class="rounded-lg w-full md:w-2/3 mb-6" />
-                            <h2 class="text-3xl font-bold text-indigo-600 mb-4">Selamat Datang di O-Kimiaku</h2>
-                            <p class="text-gray-600 max-w-3xl">
-                                O-Kimiaku adalah aplikasi pembelajaran kimia yang menyediakan informasi lengkap tentang berbagai senyawa kimia. Temukan tatanama, titik didih, titik leleh, kepolaran, rumus kimia, dan fakta menarik dari berbagai senyawa kimia dalam satu aplikasi.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+    Klik gambar senyawa untuk mengetahui detailnya lebih lanjut!
+    """)
 
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Pilih Senyawa Kimia</h2>
+    st.subheader("🔍 Pilih Senyawa:")
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                    <!-- Alkohol Card -->
-                    <div class="compound-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7787b634-74f3-4a5e-ac26-eb382119a766.png" alt="Struktur molekul etanol dengan model bola-dan-tongkat menunjukkan atom karbon, hidrogen, dan gugus hidroksil" class="w-full h-48 object-cover" />
-                        <div class="p-5">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Alkohol</h3>
-                            <p class="text-gray-600 mb-4">Senyawa organik dengan gugus fungsi hidroksil (-OH) yang terikat pada atom karbon.</p>
-                            <button class="show-info-btn w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition" data-compound="alcohol">
-                                Pelajari Lebih Lanjut
-                            </button>
-                        </div>
-                        <div class="compound-info px-5 pb-5">
-                            <div class="border-t pt-4">
-                                <h4 class="font-bold text-gray-800 mb-2">Informasi Lengkap:</h4>
-                                <ul class="space-y-2">
-                                    <li><span class="font-medium">Tatanama:</span> Nama alkohol diakhiri dengan -ol</li>
-                                    <li><span class="font-medium">Titik Didih:</span> Relatif tinggi karena ikatan hidrogen antarmolekul</li>
-                                    <li><span class="font-medium">Titik Leleh:</span> Bervariasi tergantung panjang rantai karbon</li>
-                                    <li><span class="font-medium">Kepolaran:</span> Polar karena adanya gugus -OH</li>
-                                    <li><span class="font-medium">Rumus Umum:</span> R-OH (R = gugus alkil)</li>
-                                    <li><span class="font-medium">Contoh:</span> Etanol (C₂H₅OH) yang terdapat dalam minuman beralkohol</li>
-                                </ul>
-                                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="inline-block mt-4 text-indigo-600 hover:text-indigo-800 font-medium">
-                                    Pelajari di YouTube →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+    cols = st.columns(5)
+    with cols[0]:
+         if st.button("🍷 Alkohol"):
+            st.session_state.page = 'alkohol'
+         if st.button("🕸️ Benzena"):
+            st.session_state.page = 'benzena'
+         if st.button("🌿 Fenol"):
+            st.session_state.page = 'fenol'
+         if st.button("🧪 Amina"):
+            st.session_state.page = 'amina'
+    with cols[1]:
+         if st.button("🔬 Amida"):
+            st.session_state.page = 'amida'
+         if st.button("🧫 Aldehida"):
+            st.session_state.page = 'aldehida'
+         if st.button("⚡ Nitro"):
+            st.session_state.page = 'nitro'
+         if st.button("🧭 Nitril"):
+            st.session_state.page = 'nitril'
+    with cols[2]:
+         if st.button("🧬 Alkana"):
+            st.session_state.page = 'alkana'
+         if st.button("🌱 Alkena"):
+            st.session_state.page = 'alkena'
+         if st.button("🔥 Alkuna"):
+            st.session_state.page = 'alkuna'
+         if st.button("🍞 Karbohidrat"):
+            st.session_state.page = 'karbohidrat'
+    with cols[3]:
+         if st.button("🎯 Keton"):
+            st.session_state.page = 'keton'
+         if st.button("🧴 Ester"):
+            st.session_state.page = 'ester'
+         if st.button("💧 Eter"):
+            st.session_state.page = 'eter'
+         if st.button("🍗 Protein"):
+            st.session_state.page = 'protein'
+    with cols[4]:
+         if st.button("🧂 Asam Halida"):
+            st.session_state.page = 'asam_halida'
+         if st.button("🍋 Asam Karboksilat"):
+            st.session_state.page = 'asam_karboksilat'
+         if st.button("🔌 Alkil Halida"):
+            st.session_state.page = 'alkil_halida'
+         if st.button("🛢️ Lemak dan Minyak"):
+            st.session_state.page = 'lemak_dan_minyak'
+import streamlit as st
 
-                    <!-- Asam Karboksilat Card -->
-                    <div class="compound-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/af0cdf42-16c0-44db-a9ba-f4bfd0dde814.png" alt="Struktur molekul asam asetat dengan gugus karboksil yang ditonjolkan dalam warna berbeda" class="w-full h-48 object-cover" />
-                        <div class="p-5">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Asam Karboksilat</h3>
-                            <p class="text-gray-600 mb-4">Senyawa dengan gugus karboksil (-COOH) yang bersifat asam lemah.</p>
-                            <button class="show-info-btn w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition" data-compound="carboxylic">
-                                Pelajari Lebih Lanjut
-                            </button>
-                        </div>
-                        <div class="compound-info px-5 pb-5">
-                            <div class="border-t pt-4">
-                                <h4 class="font-bold text-gray-800 mb-2">Informasi Lengkap:</h4>
-                                <ul class="space-y-2">
-                                    <li><span class="font-medium">Tatanama:</span> Nama diawali dengan 'asam' dan diakhiri dengan '-oat'</li>
-                                    <li><span class="font-medium">Titik Didih:</span> Sangat tinggi karena ikatan hidrogen kuat</li>
-                                    <li><span class="font-medium">Titik Leleh:</span> Meningkat seiring jumlah atom karbon</li>
-                                    <li><span class="font-medium">Kepolaran:</span> Sangat polar</li>
-                                    <li><span class="font-medium">Rumus Umum:</span> R-COOH</li>
-                                    <li><span class="font-medium">Contoh:</span> Asam asetat (CH₃COOH) dalam cuka</li>
-                                </ul>
-                                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="inline-block mt-4 text-indigo-600 hover:text-indigo-800 font-medium">
-                                    Pelajari di YouTube →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+def show_alkana():
+    st.title("Detail Senyawa: Alkana")
 
-                    <!-- Ester Card -->
-                    <div class="compound-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
-                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2ad2b1e8-636d-4d55-92fd-5d9c529ea955.png" alt="Ilustrasi molekul ester yang digunakan sebagai penyedap rasa buatan dalam makanan" class="w-full h-48 object-cover" />
-                        <div class="p-5">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Ester</h3>
-                            <p class="text-gray-600 mb-4">Senyawa dengan gugus -COOR yang memiliki aroma khas.</p>
-                            <button class="show-info-btn w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition" data-compound="ester">
-                                Pelajari Lebih Lanjut
-                            </button>
-                        </div>
-                        <div class="compound-info px-5 pb-5">
-                            <div class="border-t pt-4">
-                                <h4 class="font-bold text-gray-800 mb-2">Informasi Lengkap:</h4>
-                                <ul class="space-y-2">
-                                    <li><span class="font-medium">Tatanama:</span> Nama alkil dari alkohol + nama akhiran asam dengan '-oat'</li>
-                                    <li><span class="font-medium">Titik Didih:</span> Lebih rendah dari asam dengan berat molekul sebanding</li>
-                                    <li><span class="font-medium">Titik Leleh:</span> Bervariasi tergantung panjang rantai</li>
-                                    <li><span class="font-medium">Kepolaran:</span> Polar namun tidak dapat membentuk ikatan hidrogen sesamanya</li>
-                                    <li><span class="font-medium">Rumus Umum:</span> R-COO-R'</li>
-                                    <li><span class="font-medium">Contoh:</span> Etil asetat (CH₃COOC₂H₅) dengan aroma buah</li>
-                                </ul>
-                                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="inline-block mt-4 text-indigo-600 hover:text-indigo-800 font-medium">
-                                    Pelajari di YouTube →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    st.markdown("""
+    **Deskripsi:** Alkana adalah senyawa hidrokarbon jenuh yang hanya mengandung ikatan tunggal (σ) antar atom karbon (C–C) dan antara karbon dengan hidrogen (C–H). Rumus umumnya adalah CₙH₂ₙ₊₂. Alkana termasuk senyawa nonpolar dan merupakan komponen utama dalam gas alam dan minyak bumi.
 
-        <!-- Chatbot Section (hidden by default) -->
-        <section id="chatbotSection" class="hidden">
-            <div class="container mx-auto py-8 max-w-2xl">
-                <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <div class="bg-indigo-600 text-white p-4">
-                        <h2 class="text-xl font-bold">Chatbot Kimia O-Kimiaku</h2>
-                        <p class="text-sm opacity-90">Tanya apapun tentang senyawa kimia di sini</p>
-                    </div>
-                    
-                    <div class="p-4 bg-gray-50 h-96 overflow-y-auto" id="chatArea">
-                        <div class="chat-message bot-message">
-                            <p class="text-sm">Halo! Saya Kimi, asisten kimia di O-Kimiaku. Saya bisa membantu Anda memahami berbagai konsep tentang senyawa kimia. Apa yang ingin Anda ketahui?</p>
-                        </div>
-                    </div>
-                    
-                    <div class="p-4 bg-white border-t">
-                        <div class="flex">
-                            <input type="text" placeholder="Tulis pertanyaan Anda..." class="flex-grow px-4 py-2 rounded-l-lg border focus:outline-none focus:ring-2 focus:ring-indigo-500" id="userInput" />
-                            <button class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition" id="sendBtn">
-                                Kirim
-                            </button>
-                        </div>
-                        <div class="mt-3 flex items-center">
-                            <span class="text-gray-500 text-sm mr-3">Coba tanya:</span>
-                            <div class="space-x-2">
-                                <button class="suggested-question text-xs px-3 py-1 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300">Apa itu alkohol?</button>
-                                <button class="suggested-question text-xs px-3 py-1 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300">Bagaimana kepolaran ester?</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6 bg-white rounded-xl shadow-md overflow-hidden">
-                    <div class="p-4 bg-indigo-600 text-white">
-                        <h2 class="text-xl font-bold">Daftar Istilah Kimia</h2>
-                    </div>
-                    <div class="p-4">
-                        <div class="space-y-3">
-                            <div class="p-3 bg-indigo-50 rounded-lg">
-                                <h3 class="font-bold text-indigo-700">Alkohol</h3>
-                                <p class="text-sm text-gray-600">Senyawa organik dengan gugus hidroksil (-OH) yang terikat pada atom karbon jenuh.</p>
-                            </div>
-                            <div class="p-3 bg-indigo-50 rounded-lg">
-                                <h3 class="font-bold text-indigo-700">Titik Didih</h3>
-                                <p class="text-sm text-gray-600">Suhu ketika tekanan uap cairan sama dengan tekanan luar.</p>
-                            </div>
-                            <div class="p-3 bg-indigo-50 rounded-lg">
-                                <h3 class="font-bold text-indigo-700">Kepolaran</h3>
-                                <p class="text-sm text-gray-600">Distribusi muayan listrik yang tidak merata dalam molekul.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    **Titik Didih:**
+    - Titik didih alkana meningkat seiring bertambahnya jumlah atom karbon.
+    - Bentuk rantai lurus memiliki titik didih lebih tinggi dibanding bentuk bercabang.
+    - Contoh:
+        - Metana (CH₄): −161,5 °C
+        - Etana (C₂H₆): −88,6 °C
+        - Butana (C₄H₁₀): −0,5 °C
 
-        <!-- About Section (hidden by default) -->
-        <section id="aboutSection" class="hidden">
-            <div class="container mx-auto py-8">
-                <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <div class="p-6 md:p-8">
-                        <div class="flex flex-col items-center text-center mb-8">
-                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2714e4c8-a83a-422b-b18f-e5851ed73028.png" alt="Foto tim pengembang O-Kimiaku yang terdiri dari 3 orang sedang berdiri bersama di laboratorium kimia" class="rounded-full w-32 h-32 object-cover mb-4" />
-                            <h2 class="text-3xl font-bold text-indigo-600 mb-2">Tentang Kami</h2>
-                            <p class="text-gray-600 max-w-2xl">
-                                O-Kimiaku dikembangkan oleh tim yang berkomitmen untuk membuat pembelajaran kimia menjadi lebih mudah dan menyenangkan.
-                            </p>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div class="bg-indigo-50 rounded-xl p-6">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-indigo-100 p-3 rounded-full mr-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-gray-800">Visi</h3>
-                                </div>
-                                <p class="text-gray-600 text-sm">
-                                    Menjadikan kimia sebagai ilmu yang mudah dipahami dan menyenangkan untuk dipelajari oleh semua kalangan.
-                                </p>
-                            </div>
-                            
-                            <div class="bg-indigo-50 rounded-xl p-6">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-indigo-100 p-3 rounded-full mr-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-gray-800">Misi</h3>
-                                </div>
-                                <p class="text-gray-600 text-sm">
-                                    Memberikan akses pembelajaran kimia yang interaktif dan komprehensif melalui teknologi digital.
-                                </p>
-                            </div>
-                            
-                            <div class="bg-indigo-50 rounded-xl p-6">
-                                <div class="flex items-center mb-4">
-                                    <div class="bg-indigo-100 p-3 rounded-full mr-4">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-gray-800">Tim</h3>
-                                </div>
-                                <p class="text-gray-600 text-sm">
-                                    Dikembangkan oleh tim yang terdiri dari ahli kimia, pengembang perangkat lunak, dan desainer yang berpengalaman.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-indigo-50 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4">Anggota Tim</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-indigo-100">
-                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5c1b6432-7526-4c91-934c-d9ffa9e4be55.png" alt="Foto Profil Ketua Tim - Seorang pria berkacamata dengan background laboratorium kimia" class="w-12 h-12 rounded-full object-cover" />
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Dr. Adi Pratama</h4>
-                                        <p class="text-xs text-gray-500">Ahli Kimia Organik</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-indigo-100">
-                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/527ff112-7153-4077-8cf6-593bf6eb480f.png" alt="Foto Profil Anggota Tim - Wanita muda dengan jas lab sedang tersenyum" class="w-12 h-12 rounded-full object-cover" />
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Siti Rahayu</h4>
-                                        <p class="text-xs text-gray-500">Pengembang Frontend</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-indigo-100">
-                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a8f6858d-b87b-45dc-8ed0-758c14f0e58f.png" alt="Foto Profil Anggota Tim - Pria muda asia memegang tablet dengan tampilan kode pemrograman" class="w-12 h-12 rounded-full object-cover" />
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Budi Santoso</h4>
-                                        <p class="text-xs text-gray-500">Pengembang Backend</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-indigo-100">
-                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cd63f880-828e-4e46-a010-3874bf7b4cd8.png" alt="Foto Profil Anggota Tim - Desainer wanita dengan sketsa antarmuka aplikasi di latar belakang" class="w-12 h-12 rounded-full object-cover" />
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Dewi Anggraeni</h4>
-                                        <p class="text-xs text-gray-500">UI/UX Designer</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-indigo-100">
-                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8d888091-fd3a-4cf1-9641-1f40b1ad8785.png" alt="Foto Profil Anggota Tim - Pria dewasa menunjuk ke diagram struktur molekul di papan tulis" class="w-12 h-12 rounded-full object-cover" />
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Prof. Bambang S.</h4>
-                                        <p class="text-xs text-gray-500">Koordinator Konten</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-indigo-100">
-                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2af8c149-b62d-4982-9d6e-3d7238b63507.png" alt="Foto Profil Anggota Tim - Mahasiswa kimia sedang mengaduk larutan dalam gelas kimia" class="w-12 h-12 rounded-full object-cover" />
-                                    <div>
-                                        <h4 class="font-medium text-gray-800">Rina Wijaya</h4>
-                                        <p class="text-xs text-gray-500">Asisten Penelitian</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+    **Kepolaran:** Nonpolar, tidak larut dalam air.
 
-    <!-- Modal Rating -->
-    <div id="ratingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">Berikan Rating Anda</h3>
-                <button id="closeRatingModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <p class="text-gray-600 mb-6">Bagaimana pengalaman Anda menggunakan O-Kimiaku?</p>
-            
-            <div class="mb-6 flex justify-center">
-                <div class="rating-stars">
-                    <input type="radio" id="star5" name="rating" value="5" />
-                    <label for="star5" title="Sangat Baik">★</label>
-                    <input type="radio" id="star4" name="rating" value="4" />
-                    <label for="star4" title="Baik">★</label>
-                    <input type="radio" id="star3" name="rating" value="3" />
-                    <label for="star3" title="Cukup">★</label>
-                    <input type="radio" id="star2" name="rating" value="2" />
-                    <label for="star2" title="Kurang">★</label>
-                    <input type="radio" id="star1" name="rating" value="1" />
-                    <label for="star1" title="Buruk">★</label>
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <label for="feedback" class="block text-sm font-medium text-gray-700 mb-2">Masukan (opsional)</label>
-                <textarea id="feedback" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Apa yang bisa kami tingkatkan?"></textarea>
-            </div>
-            
-            <div class="flex justify-end space-x-3">
-                <button id="cancelRating" class="px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-gray-100">Nanti</button>
-                <button id="submitRating" class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition">Kirim</button>
-            </div>
-        </div>
-    </div>
+    **Ikatan Kimia:** Hanya memiliki ikatan tunggal kovalen (σ).
 
-    <footer class="bg-indigo-600 text-white py-4 px-4 fixed bottom-0 w-full">
-        <div class="container mx-auto flex justify-between items-center">
-            <p class="text-sm">© 2023 O-Kimiaku. All rights reserved.</p>
-            <button id="rateBtn" class="text-sm font-medium bg-white text-indigo-600 px-4 py-1 rounded-full hover:bg-indigo-50 transition">
-                Beri Rating
-            </button>
-        </div>
-    </footer>
+    **Tata Nama (IUPAC):** Berdasarkan jumlah atom karbon dan akhiran -ana.
+    """)
 
-    <script>
-        // DOM Elements
-        const menuBtn = document.getElementById('menuBtn');
-        const closeMenuBtn = document.getElementById('closeMenuBtn');
-        const overlay = document.getElementById('overlay');
-        const sidebar = document.getElementById('sidebar');
-        const homeBtn = document.getElementById('homeBtn');
-        const chatbotBtn = document.getElementById('chatbotBtn');
-        const aboutBtn = document.getElementById('aboutBtn');
-        const homeSection = document.getElementById('homeSection');
-        const chatbotSection = document.getElementById('chatbotSection');
-        const aboutSection = document.getElementById('aboutSection');
-        const rateBtn = document.getElementById('rateBtn');
-        const ratingModal = document.getElementById('ratingModal');
-        const closeRatingModal = document.getElementById('closeRatingModal');
-        const cancelRating = document.getElementById('cancelRating');
-        const submitRating = document.getElementById('submitRating');
-        const showInfoBtns = document.querySelectorAll('.show-info-btn');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const chatArea = document.getElementById('chatArea');
-        const suggestedQuestions = document.querySelectorAll('.suggested-question');
+def show_alkena():
+    st.title("Detail Senyawa: Alkena")
 
-        // Sidebar Toggle
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-        });
+    st.markdown("""
+    **Deskripsi:** Alkena adalah senyawa hidrokarbon tak jenuh yang memiliki setidaknya satu ikatan rangkap dua (C=C) antar atom karbon. Rumus umumnya CₙH₂ₙ.
 
-        closeMenuBtn.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        });
+    **Titik Didih:**
+    - Titik didih alkena meningkat seiring bertambahnya jumlah atom karbon.
+    - Contoh:
+        - Etena (C₂H₄): −103,7 °C
+        - Propena (C₃H₆): −47,6 °C
 
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            ratingModal.classList.add('hidden');
-        });
+    **Kepolaran:** Secara umum nonpolar, sedikit lebih polar dari alkana.
 
-        // Navigation
-        homeBtn.addEventListener('click', () => {
-            homeSection.classList.remove('hidden');
-            chatbotSection.classList.add('hidden');
-            aboutSection.classList.add('hidden');
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            resetAllCompoundInfo();
-        });
+    **Ikatan Kimia:** Memiliki 1 ikatan sigma (σ) dan 1 ikatan pi (π).
 
-        chatbotBtn.addEventListener('click', () => {
-            homeSection.classList.add('hidden');
-            chatbotSection.classList.remove('hidden');
-            aboutSection.classList.add('hidden');
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            resetAllCompoundInfo();
-        });
+    **Tata Nama (IUPAC):** Berdasarkan rantai terpanjang yang mengandung ikatan rangkap dua dan akhiran -ena.
+    """)
 
-        aboutBtn.addEventListener('click', () => {
-            homeSection.classList.add('hidden');
-            chatbotSection.classList.add('hidden');
-            aboutSection.classList.remove('hidden');
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            resetAllCompoundInfo();
-        });
+def show_alkuna():
+    st.title("Detail Senyawa: Alkuna")
 
-        // Compound Info Toggle
-        showInfoBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const infoSection = this.closest('.compound-card').querySelector('.compound-info');
-                
-                // Close all first
-                resetAllCompoundInfo();
-                
-                // Toggle current
-                infoSection.classList.toggle('active');
-                
-                // Change button text
-                if (infoSection.classList.contains('active')) {
-                    this.textContent = 'Sembunyikan';
-                } else {
-                    this.textContent = 'Pelajari Lebih Lanjut';
-                }
-            });
-        });
+    st.markdown("""
+    **Deskripsi:** Alkuna adalah senyawa hidrokarbon tak jenuh yang memiliki setidaknya satu ikatan rangkap tiga (C≡C) antar atom karbon. Rumus umumnya CₙH₂ₙ₋₂.
 
-        function resetAllCompoundInfo() {
-            document.querySelectorAll('.compound-info').forEach(info => {
-                info.classList.remove('active');
-                const btn = info.closest('.compound-card').querySelector('.show-info-btn');
-                btn.textContent = 'Pelajari Lebih Lanjut';
-            });
-        }
+    **Titik Didih:**
+    - Titik didih alkuna meningkat seiring jumlah atom karbon.
+    - Contoh:
+        - Etuna (asetilena, C₂H₂): −84 °C
+        - Butuna (C₄H₆): sekitar 0–4 °C
 
-        // Rating Modal
-        rateBtn.addEventListener('click', () => {
-            ratingModal.classList.remove('hidden');
-            overlay.classList.add('active');
-        });
+    **Kepolaran:** Sebagian besar alkuna adalah nonpolar.
 
-        closeRatingModal.addEventListener('click', () => {
-            ratingModal.classList.add('hidden');
-            overlay.classList.remove('active');
-        });
+    **Ikatan Kimia:** Memiliki 1 ikatan sigma (σ) dan 2 ikatan pi (π).
 
-        cancelRating.addEventListener('click', () => {
-            ratingModal.classList.add('hidden');
-            overlay.classList.remove('active');
-        });
+    **Tata Nama (IUPAC):** Berdasarkan rantai terpanjang yang mengandung ikatan rangkap tiga dan akhiran -una.
+    """)
 
-        submitRating.addEventListener('click', () => {
-            const rating = document.querySelector('input[name="rating"]:checked');
-            const feedback = document.getElementById('feedback').value;
-            
-            if (!rating) {
-                alert('Silahkan berikan rating terlebih dahulu');
-                return;
-            }
-            
-            // In a real app, you would send this to a server
-            console.log('Rating:', rating.value);
-            console.log('Feedback:', feedback);
-            
-            alert('Terima kasih atas rating dan masukan Anda!');
-            ratingModal.classList.add('hidden');
-            overlay.classList.remove('active');
-            
-            // Reset form
-            document.getElementById('feedback').value = '';
-            rating.checked = false;
-        });
+def show_alkohol():
+    st.title("Detail Senyawa: Alkohol")
 
-        // Simple Chatbot
-        sendBtn.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
+    st.markdown("""
+    **Deskripsi:** Alkohol adalah senyawa organik yang memiliki gugus hidroksil (–OH) yang terikat pada atom karbon jenuh (sp³). Rumus umum: R–OH.
 
-        // Suggested questions
-        suggestedQuestions.forEach(question => {
-            question.addEventListener('click', function() {
-                userInput.value = this.textContent;
-                sendMessage();
-            });
-        });
+    **Titik Didih:**
+    - Tinggi dibanding alkana/alkena/alkuna dengan jumlah karbon yang sama.
+    - Contoh:
+        - Metanol (CH₃OH): 64,7 °C
+        - Etanol (CH₃CH₂OH): 78,4 °C
+        - 1-Butanol: 117,7 °C
 
-        function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
-            
-            // Add user message
-            const userMessageDiv = document.createElement('div');
-            userMessageDiv.className = 'chat-message user-message';
-            userMessageDiv.innerHTML = `<p class="text-sm">${message}</p>`;
-            chatArea.appendChild(userMessageDiv);
-            
-            // Clear input
-            userInput.value = '';
-            
-            // Scroll to bottom
-            chatArea.scrollTop = chatArea.scrollHeight;
-            
-            // Bot response
-            setTimeout(() => {
-                let response = '';
-                
-                if (message.toLowerCase().includes('alkohol')) {
-                    response = `Alkohol adalah senyawa organik yang mengandung gugus hidroksil (-OH) yang terikat pada atom karbon jenuh. Contoh paling umum adalah etanol (C₂H₅OH) yang terdapat dalam minuman beralkohol. Alkohol memiliki sifat fisik seperti titik didih yang relatif tinggi karena adanya ikatan hidrogen.`;
-                } 
-                else if (message.toLowerCase().includes('ester')) {
-                    response = `Ester adalah senyawa organik dengan struktur R-COO-R' yang terbentuk dari reaksi esterifikasi antara asam karboksilat dan alkohol. Ester banyak digunakan sebagai penyedap rasa buatan karena memiliki aroma yang khas, misalnya etil butirat yang memiliki aroma buah nanas.`;
-                } 
-                else if (message.toLowerCase().includes('titik didih')) {
-                    response = `Titik didih adalah suhu ketika tekanan uap suatu zat cair sama dengan tekanan eksternal yang mengenai permukaan zat cair tersebut. Dalam kimia organik, titik didih dipengaruhi oleh berat molekul dan kekuatan gaya antarmolekul seperti ikatan hidrogen. Sebagai contoh, alkohol memiliki titik didih yang lebih tinggi daripada alkana dengan berat molekul serupa karena mampu membentuk ikatan hidrogen.`;
-                } 
-                else if (message.toLowerCase().includes('kepolaran')) {
-                    response = `Kepolaran senyawa kimia mengacu pada distribusi muatan listrik yang tidak merata dalam molekul. Molekul polar memiliki momen dipol karena perbedaan keelektronegatifan atom-atom yang berikatan. Contohnya, air (H₂O) sangat polar karena bentuknya yang bengkok dan perbedaan keelektronegatifan antara oksigen dan hidrogen.`;
-                } 
-                else {
-                    response = `Maaf, saya tidak sepenuhnya memahami pertanyaan Anda. Bisakah Anda memperjelas pertanyaan tentang kimia yang ingin Anda ketahui? Sebagai contoh, Anda bisa menanyakan tentang sifat-sifat alkohol, tatanama senyawa, atau prinsip kesetimbangan kimia.`;
-                }
-                
-                const botMessageDiv = document.createElement('div');
-                botMessageDiv.className = 'chat-message bot-message';
-                botMessageDiv.innerHTML = `<p class="text-sm">${response}</p>`;
-                chatArea.appendChild(botMessageDiv);
-                
-                // Scroll to bottom
-                chatArea.scrollTop = chatArea.scrollHeight;
-            }, 500);
-        }
-    </script>
-</body>
-</html>
+    **Kepolaran:** Polar, dapat larut dalam air.
+
+    **Ikatan Kimia:** Gugus –OH terdiri dari ikatan kovalen polar O–H dan C–O.
+
+    **Tata Nama (IUPAC):** Berdasarkan rantai utama yang mengandung gugus –OH dan akhiran -ol.
+    """)
+
+def show_fenol():
+    st.title("Detail Senyawa: Fenol")
+
+    st.markdown("""
+    **Deskripsi:** Fenol (C₆H₅OH) adalah senyawa aromatik yang terdiri dari cincin benzena yang terikat pada gugus hidroksil (-OH).
+
+    **Titik Didih:**
+    - Titik didih fenol: 181,7 °C
+    - Titik leleh: 40,9 °C
+
+    **Kepolaran:** Polar, karena mengandung gugus hidroksil (-OH).
+
+    **Ikatan Kimia:** Ikatan kovalen antara atom karbon dan hidrogen dalam cincin benzena.
+
+    **Tata Nama (IUPAC):** Nama umum: Fenol, Nama IUPAC: Benzenol.
+    """)
+
+def show_aldehid():
+    st.title("Detail Senyawa: Aldehid")
+
+    st.markdown("""
+    **Deskripsi:** Aldehid adalah senyawa organik yang memiliki gugus karbonil (C=O) di ujung rantai karbon, dengan rumus umum R–CHO.
+
+    **Titik Didih:**
+    - Titik didih lebih tinggi daripada alkana/eter, tapi lebih rendah dari alkohol.
+    - Contoh:
+        - Formaldehida (HCHO): −19 °C
+        - Asetaldehida (CH₃CHO): 20,2 °C
+        - Butanal: 75 °C
+
+    **Kepolaran:** Sangat polar, larut dalam air.
+
+    **Ikatan Kimia:** Gugus karbonil terdiri dari satu ikatan sigma (σ) dan satu ikatan pi (π).
+
+    **Tata Nama (IUPAC):** Berdasarkan rantai utama yang mengandung gugus –CHO dan akhiran -al.
+    """)
+
+def show_keton():
+    st.title("Detail Senyawa: Keton")
+
+    st.markdown("""
+    **Deskripsi:** Keton adalah senyawa organik yang memiliki gugus karbonil (C=O) di tengah rantai karbon, dengan rumus umum R–CO–R′.
+
+    **Titik Didih:**
+    - Titik didih lebih tinggi dari alkana/eter, tetapi lebih rendah dari alkohol.
+    - Contoh:
+        - Aseton (CH₃COCH₃): 56,5 °C
+        - 2-Butanon (CH₃COCH₂CH₃): 79,6 °C
+
+    **Kepolaran:** Polar, larut dalam air untuk rantai pendek.
+
+    **Ikatan Kimia:** Gugus karbonil mengandung 1 ikatan sigma (σ) dan 1 ikatan pi (π).
+
+    **Tata Nama (IUPAC):** Berdasarkan rantai utama yang mengandung gugus karbonil dan akhiran -on.
+    """)
+
+def show_amina():
+    st.title("Detail Senyawa: Amina")
+
+    st.markdown("""
+    **Deskripsi:** Amina adalah senyawa organik turunan amonia (NH₃) di mana satu atau lebih atom hidrogen diganti dengan gugus alkil atau aril.
+
+    **Titik Didih:**
+    - Amina primer dan sekunder dapat membentuk ikatan hidrogen, sehingga titik didihnya lebih tinggi dari senyawa nonpolar.
+    - Contoh:
+        - Metilamina (CH₃NH₂): −6.3 °C
+        - Dimetilamina (CH₃)₂NH: 7 °C
+        - Trimetilamina (CH₃)₃N: 3.5 °C
+
+    **Kepolaran:** Polar, larut dalam air untuk rantai pendek.
+
+    **Ikatan Kimia:** Amina memiliki ikatan sigma (σ) antara nitrogen dan karbon/hidrogen.
+
+    **Tata Nama (IUPAC):** Berdasarkan nama gugus alkil + amina.
+    """)
+
+def show_asam_karboksilat():
+    st.title("Detail Senyawa: Asam Karboksilat")
+
+    st.markdown("""
+    **Deskripsi:** Asam karboksilat adalah senyawa organik yang memiliki gugus karboksil (–COOH). Rumus umum: R–COOH.
+
+    **Titik Didih:**
+    - Sangat tinggi dibanding alkohol, karena asam karboksilat membentuk ikatan hidrogen ganda (dimer) yang kuat.
+    - Contoh:
+        - Asam format (HCOOH): 100,8 °C
+        - Asam asetat (CH₃COOH): 118,1 °C
+        - Asam butirat (CH₃CH₂CH₂COOH): 163,7 °C
+
+    **Kepolaran:** Sangat polar, sangat larut dalam air.
+
+    **Ikatan Kimia:** Mengandung ikatan sigma (σ) dan pi (π) pada C=O.
+
+    **Tata Nama (IUPAC):** Berdasarkan rantai utama yang mengandung gugus –COOH dan akhiran -oat untuk garam/ester.
+    """)
+
+def show_amida():
+    st.title("Detail Senyawa: Amida")
+
+    st.markdown("""
+    **Deskripsi:** Amida adalah turunan dari asam karboksilat di mana gugus –OH pada gugus karboksil (–COOH) digantikan oleh gugus amina.
+
+    **Titik Didih:**
+    - Titik didih tinggi, karena dapat membentuk ikatan hidrogen yang kuat.
+    - Contoh:
+        - Metanamida (formamida, HCONH₂): 210 °C
+        - Etanamida (asetamida, CH₃CONH₂): 222 °C
+
+    **Kepolaran:** Sangat polar, larut dalam air.
+
+    **Ikatan Kimia:** Memiliki ikatan sigma dan pi dalam gugus karbonil (C=O).
+
+    **Tata Nama (IUPAC):** Berdasarkan nama asam karboksilat asalnya, dengan akhiran -amida.
+    """)
+
+def show_protein():
+    st.title("Detail Senyawa: Protein")
+
+    st.markdown("""
+    **Deskripsi:** Protein adalah polimer alami yang tersusun dari rantai panjang asam amino yang terhubung oleh ikatan peptida.
+
+    **Titik Didih:** Tidak relevan untuk protein besar, karena panas menyebabkan denaturasi.
+
+    **Kepolaran:** Amfipatik, mengandung bagian polar dan nonpolar.
+
+    **Ikatan Kimia:** Ikatan peptida (amida) antara gugus –COOH dan –NH₂ antar asam amino.
+
+    **Tata Nama:** Tidak dinamai secara IUPAC, nama protein berdasarkan fungsi, struktur, atau asal biologis.
+    """)
+
+def show_karbohidrat():
+    st.title("Detail Senyawa: Karbohidrat")
+
+    st.markdown("""
+    **Deskripsi:** Karbohidrat adalah senyawa organik yang terdiri dari unsur C, H, dan O, dengan rumus umum (CH₂O)n.
+
+    **Titik Didih:** Tidak memiliki titik didih pasti, karena terurai sebelum menguap.
+
+    **Kepolaran:** Sangat polar, larut dalam air.
+
+    **Ikatan Kimia:** Tersusun dari ikatan glikosidik (C–O–C) antara gugus –OH dari dua monosakarida.
+
+    **Tata Nama:** Monosakarida dinamai berdasarkan jumlah atom karbon + tipe gugus karbonil.
+    """)
+
+def show_lemak_minyak():
+    st.title("Detail Senyawa: Lemak dan Minyak")
+
+    st.markdown("""
+    **Deskripsi:** Lemak dan minyak adalah ester dari gliserol dan asam lemak (trigliserida).
+
+    **Titik Didih:** Sangat tinggi (300 °C ke atas), tetapi mudah rusak saat dipanaskan berlebih.
+
+    **Kepolaran:** Nonpolar, tidak larut dalam air.
+
+    **Ikatan Kimia:** Ikatan ester (–COO–) antara gliserol dan asam lemak.
+
+    **Tata Nama:** Asam lemak dinamai seperti asam karboksilat panjang.
+    """)
+
+def show_benzena():
+    st.title("Detail Senyawa: Benzena")
+
+    st.markdown("""
+    **Deskripsi:** Benzena adalah senyawa hidrokarbon aromatik paling sederhana dengan rumus C₆H₆.
+
+    **Titik Didih:** Titik didih benzena: 80,1 °C.
+
+    **Kepolaran:** Nonpolar secara keseluruhan.
+
+    **Ikatan Kimia:** Setiap atom C terhubung dengan dua C lain dan satu H, membentuk ikatan sigma (σ).
+
+    **Tata Nama (IUPAC):** Dinamai benzena jika murni.
+    """)
+
+def show_alkil_halida():
+    st.title("Detail Senyawa: Alkil Halida")
+
+    st.markdown("""
+    **Deskripsi:** Alkil halida atau haloalkana adalah senyawa organik yang terbentuk dari alkana dengan menggantikan satu atau lebih atom H dengan atom halogen.
+
+    **Titik Didih:** Titik didih lebih tinggi dari alkana dengan jumlah karbon setara.
+
+    **Kepolaran:** Polar, larut dalam pelarut organik.
+
+    **Ikatan Kimia:** Mengandung ikatan sigma (σ) polar antara C–X.
+
+    **Tata Nama (IUPAC):** Berdasarkan rantai utama dari alkana dan posisi halogen.
+    """)
+
+def show_nitro():
+    st.title("Detail Senyawa: Nitro")
+
+    st.markdown("""
+    **Deskripsi:** Senyawa nitro adalah senyawa organik yang mengandung gugus nitro (–NO₂).
+
+    **Titik Didih:** Umumnya memiliki titik didih tinggi.
+
+    **Kepolaran:** Sangat polar, larut dalam pelarut polar aprotik.
+
+    **Ikatan Kimia:** Gugus nitro memiliki 1 ikatan sigma dan 1 ikatan pi antara N=O.
+
+    **Tata Nama (IUPAC):** Gugus –NO₂ dinamai sebagai “nitro-” dan dianggap substituen.
+    """)
+
+def show_nitril():
+    st.title("Detail Senyawa: Nitril")
+
+    st.markdown("""
+    **Deskripsi:** Nitril adalah senyawa organik yang mengandung gugus –C≡N (gugus sianida).
+
+    **Titik Didih:** Nitril memiliki titik didih sedang hingga tinggi.
+
+    **Kepolaran:** Sangat polar, larut dalam pelarut polar.
+
+    **Ikatan Kimia:** Mengandung ikatan rangkap tiga antara karbon dan nitrogen.
+
+    **Tata Nama (IUPAC):** Menggunakan akhiran -nitril.
+    """)
+
+def show_ester():
+    st.title("Detail Senyawa: Ester")
+
+    st.markdown("""
+    **Deskripsi:** Ester adalah senyawa turunan asam karboksilat di mana gugus –OH diganti dengan gugus alkoksi (–OR).
+
+    **Titik Didih:** Titik didih lebih rendah daripada asam karboksilat dan alkohol.
+
+    **Kepolaran:** Agak polar, larut dalam pelarut organik.
+
+    **Ikatan Kimia:** Mengandung 1 ikatan σ dan 1 ikatan π dalam gugus karbonil (C=O).
+
+    **Tata Nama (IUPAC):** Nama alkil dari bagian alkohol + nama rantai asam dengan akhiran -oat.
+    """)
+
+def show_asam_halida():
+    st.title("Detail Senyawa: Asam Halida")
+
+    st.markdown("""
+    **Deskripsi:** Asam halida adalah turunan dari asam karboksilat di mana gugus –OH diganti oleh halogen.
+
+    **Titik Didih:** Titik didih lebih rendah daripada asam karboksilat.
+
+    **Kepolaran:** Sangat polar, tidak larut dalam air.
+
+    **Ikatan Kimia:** Mengandung 1 ikatan σ dan 1 ikatan π dalam gugus karbonil (C=O).
+
+    **Tata Nama (IUPAC):** Nama berasal dari nama asam karboksilat induk, ubah akhiran -oat menjadi -oyl halida.
+    """)
+
+def show_chatbot():
+    st.title("💬 Chatbot O-KIMIAKU")
+
+    question = st.text_input("Tanyakan sesuatu tentang senyawa kimia (misal: kepolaran ester):")
+
+    if question:
+        q = question.lower()
+
+        # Benzena
+        if "benzena" in q:
+            if "kepolaran" in q:
+                st.success("Benzena bersifat nonpolar dan tidak larut dalam air.")
+            elif "rumus" in q or "gugus" in q:
+                st.success("Rumus benzena: C₆H₆.")
+            elif "titik" in q:
+                st.success("Titik didih benzena: 80,1 °C.")
+            elif "fakta" in q:
+                st.success("Benzena adalah senyawa hidrokarbon aromatik paling sederhana.")
+            elif "tata nama" in q:
+                st.success("Tata nama benzena: Dinamai benzena jika murni.")
+            elif "ikatan" in q:
+                st.success("Ikatan kimia benzena: Setiap atom C terhubung dengan dua C lain dan satu H, membentuk ikatan sigma (σ).")
+            elif "video" in q:
+                st.success("🔗 [Tonton Penjelasan Benzena di YouTube](https://www.youtube.com/watch?v=2CK7zTJdXXo)")
+            else:
+                st.info("Benzena adalah senyawa aromatik dengan struktur cincin.")
 
 
+            else:
+                st.warning("Maaf, senyawa tersebut belum tersedia atau belum dikenali.")
+
+def show_about():
+    st.title("Tentang Kami 👨‍💻")
+    st.markdown("""
+**Developer:**  
+KELOMPOK 11 KELAS 1C 
+1. Nama : Azizah Putri Azzahra (2460340)  
+2. Nama : Nadifah Adya Anggita (2460449)
+3. Nama : Raudhatul Dahlia (2460493)
+4. Nama : Zahira Dwi Safitri (2460542) 
+   
+Kami membuat aplikasi ini untuk mempermudah pembelajaran kimia dengan cara yang interaktif.
+""")
+
+def show_rating():
+    st.title("Sebelum Keluar, Beri Rating Aplikasi Ini ⭐")
+    sentiment_mapping = ["one", "two", "three", "four", "five"]
+    selected = st.feedback("stars")
+    if selected is not None:
+       st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
+
+# ------------- UI & PAGE CONTROL --------------
+if 'page' not in st.session_state:
+    st.session_state.page = 'home'
+
+# Sidebar Navigasi TANPA LINGKARAN
+st.sidebar.title("📚 Navigasi")
+
+if st.sidebar.button("🏠 Beranda"):
+    st.session_state.page = 'home'
+
+if st.sidebar.button("👥 About Us"):
+    st.session_state.page = 'about'
+
+if st.sidebar.button("💬 Chatbot"):
+    st.session_state.page = 'chatbot'
+    
+if st.sidebar.button(" ⭐ Rating"):
+    st.session_state.page = 'rating'
+    
+# Routing
+if st.session_state.page == 'home':
+    show_home()
+elif st.session_state.page == 'alkohol':
+    show_alkohol()
+elif st.session_state.page == 'about':
+    show_about()
+elif st.session_state.page == 'chatbot':
+    show_chatbot()
+elif st.session_state.page == 'rating':
+    show_rating()
+elif st.session_state.page == 'amina':
+    show_amina()
+elif st.session_state.page == 'alkil halida':
+    show_alkil_halida()
+elif st.session_state.page == 'eter':
+    show_eter()
+elif st.session_state.page == 'amida':
+    show_amida()
+elif st.session_state.page == 'nitril':
+    show_nitril()
+elif st.session_state.page == 'aldehida':
+    show_aldehida()
+elif st.session_state.page == 'nitro':
+    show_nitril()
+elif st.session_state.page == 'keton':
+    show_keton()
+elif st.session_state.page == 'asam halida':
+    show_nitro()
+elif st.session_state.page == 'ester':
+    show_ester()
+elif st.session_state.page == 'tiol':
+    show_tiol()
+elif st.session_state.page == 'alkana':
+    show_alkana()
+elif st.session_state.page == 'alkena':
+    show_alkena()
+elif st.session_state.page == 'alkuna':
+    show_alkuna()
+elif st.session_state.page == 'fenol':
+    show_fenol()
+elif st.session_state.page == 'benzena':
+    show_benzena()
